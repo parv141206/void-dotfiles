@@ -1,4 +1,4 @@
-# Parv's Hyprland Dotfiles
+# My Hyprland Dotfiles
 
 Black bar. Sharp text. Fast menus. No giant desktop soup.
 
@@ -50,7 +50,7 @@ Waybar quick buttons:
 ## Install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git ~/dotfiles
+git clone https://github.com/parv141206/void-dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ./install.sh --dry-run
 ./install.sh
