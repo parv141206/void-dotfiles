@@ -1,0 +1,10 @@
+* {
+    selection-background-color: #b27986;
+    selection-color: #e6e6e6;
+}
+
+QToolTip {
+    color: #e8e8e8;
+    background-color: #050505;
+    border: 1px solid #191919;
+}
