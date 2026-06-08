@@ -1,0 +1,12 @@
+* {
+    bg: #000000;
+    fg: #b8b8b8;
+    fghi: #e8e8e8;
+    sep: #101010;
+    border: #191919;
+    panel: #050505;
+    panelhi: #1c1315;
+    accent: #b27986;
+    red: #a85858;
+    amber: #a88c5c;
+}

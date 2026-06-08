@@ -1,0 +1,165 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 26,
+    "margin": 0,
+    "exclusive": true,
+
+    "modules-left": [
+        "custom/settings",
+        "hyprland/workspaces",
+        "hyprland/submap"
+    ],
+    "modules-center": [],
+    "modules-right": [
+        "custom/screenshot",
+        "custom/recording",
+        "network",
+        "custom/bluetooth",
+        "custom/theme",
+        "custom/vitals",
+        "custom/uptime",
+        "wireplumber",
+        "backlight",
+        "battery",
+        "clock#date",
+        "clock#time",
+        "custom/power-profile",
+        "custom/user"
+    ],
+
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "disable-scroll": true,
+        "disable-click": true,
+        "all-outputs": false,
+        "sort-by-number": true
+    },
+
+    "hyprland/submap": {
+        "format": "{}",
+        "tooltip": false
+    },
+
+    "custom/settings": {
+        "format": "󰒓",
+        "tooltip": false,
+        "on-click": "~/.config/hypr/scripts/settings-menu.sh"
+    },
+    "custom/screenshot": {
+        "format": "󰹑",
+        "tooltip": true,
+        "tooltip-format": "Screenshot\nLeft click: screenshot menu\nRight click: select area + edit\nMiddle click: screenshots folder",
+        "on-click": "~/.config/hypr/scripts/screenshot.sh menu",
+        "on-click-right": "~/.config/hypr/scripts/screenshot.sh area-edit",
+        "on-click-middle": "xdg-open ~/Pictures/Screenshots"
+    },
+    "custom/recording": {
+        "exec": "~/.config/hypr/scripts/recording.sh status",
+        "return-type": "json",
+        "interval": 1,
+        "tooltip": true,
+        "on-click": "~/.config/hypr/scripts/recording.sh toggle",
+        "on-click-right": "~/.config/hypr/scripts/recording.sh area",
+        "on-click-middle": "~/.config/hypr/scripts/recording.sh open"
+    },
+
+    "network": {
+        "format-wifi":        "󰤨 {essid}",
+        "format-ethernet":    "󰈀 eth",
+        "format-disconnected": "󰤭 offline",
+        "format-linked":      "󰈁 linked",
+        "tooltip": false,
+        "interval": 5,
+        "on-click": "~/.config/hypr/scripts/network-menu.sh"
+    },
+
+    "custom/bluetooth": {
+        "exec": "~/.config/waybar/scripts/bluetooth.sh",
+        "return-type": "json",
+        "interval": 5,
+        "tooltip": false,
+        "on-click": "~/.config/hypr/scripts/bluetooth-menu.sh"
+    },
+
+    "custom/theme": {
+        "format": "󰏘",
+        "tooltip": false,
+        "on-click": "~/.config/hypr/scripts/theme-menu.sh"
+    },
+
+    "custom/vitals": {
+        "exec": "~/.config/waybar/scripts/vitals.sh",
+        "return-type": "json",
+        "interval": 3,
+        "tooltip": true,
+        "on-click": "~/.config/hypr/scripts/settings-menu.sh"
+    },
+
+    "custom/uptime": {
+        "exec": "~/.config/waybar/scripts/uptime.sh",
+        "format": "󰔟 {}",
+        "interval": 60,
+        "tooltip": false,
+        "on-click": "~/.config/hypr/scripts/power-menu.sh"
+    },
+
+    "wireplumber": {
+        "format": "󰕾 {volume}%",
+        "format-muted": "󰖁 muted",
+        "tooltip": false,
+        "on-click": "~/.config/hypr/scripts/audio-menu.sh",
+        "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+    },
+
+    "backlight": {
+        "format": "󰃞 {percent}%",
+        "tooltip": false,
+        "on-click": "~/.config/hypr/scripts/brightness-menu.sh",
+        "on-scroll-up": "brightnessctl set +5%",
+        "on-scroll-down": "brightnessctl set 5%-"
+    },
+
+    "battery": {
+        "states": {
+            "warning":  30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged":  "󰚥 {capacity}%",
+        "format-icons":   ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "tooltip": false,
+        "interval": 30,
+        "on-click": "~/.config/hypr/scripts/battery-menu.sh"
+    },
+
+    "clock#date": {
+        "format": "󰃭 {:%a %d %b}",
+        "tooltip": false,
+        "on-click": "~/.config/hypr/scripts/clock-menu.sh"
+    },
+
+    "clock#time": {
+        "format": "󰥔 {:%I:%M %p}",
+        "tooltip": false,
+        "on-click": "~/.config/hypr/scripts/clock-menu.sh"
+    },
+
+    "custom/power-profile": {
+        "exec": "~/.config/waybar/scripts/power_profile.sh",
+        "return-type": "json",
+        "interval": 15,
+        "tooltip": false,
+        "on-click": "~/.config/hypr/scripts/power-menu.sh"
+    },
+
+    "custom/user": {
+        "exec": "whoami",
+        "format": " {}",
+        "interval": "once",
+        "tooltip": false,
+        "on-click": "~/.config/hypr/scripts/power-menu.sh"
+    }
+}

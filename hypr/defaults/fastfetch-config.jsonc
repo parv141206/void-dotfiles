@@ -1,0 +1,108 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+    "logo": {
+        "source": "arch",
+        "type": "small",
+        "padding": {
+            "top": 1,
+            "right": 4
+        },
+        "color": {
+            "1": "36",
+            "2": "34"
+        }
+    },
+    "display": {
+        "separator": "  ",
+        "key": {
+            "width": 8,
+            "type": "string"
+        },
+        "color": {
+            "keys": "36",
+            "title": "37",
+            "output": "37",
+            "separator": "8"
+        },
+        "brightColor": true,
+        "percent": {
+            "type": [
+                "num-color"
+            ]
+        }
+    },
+    "modules": [
+        {
+            "type": "custom",
+            "format": "parv"
+        },
+        {
+            "type": "break"
+        },
+        {
+            "type": "os",
+            "key": "os",
+            "format": "{name}"
+        },
+        {
+            "type": "command",
+            "key": "cpu",
+            "text": "lscpu | awk -F: '/Model name/ {print $2; exit}' | sed 's/^[[:space:]]*//; s/13th Gen Intel(R) Core(TM) //; s/Intel(R) Core(TM) //; s/ CPU.*//; s/(R)//g; s/(TM)//g'"
+        },
+        {
+            "type": "memory",
+            "key": "ram"
+        },
+        {
+            "type": "shell",
+            "key": "sh",
+            "format": "{pretty-name}"
+        },
+        {
+            "type": "wm",
+            "key": "wm",
+            "format": "{pretty-name}"
+        },
+        {
+            "type": "terminal",
+            "key": "term",
+            "format": "{pretty-name}"
+        },
+        {
+            "type": "kernel",
+            "key": "kernel",
+            "format": "{release}"
+        },
+        {
+            "type": "uptime",
+            "key": "up"
+        },
+        {
+            "type": "command",
+            "key": "gpu",
+            "text": "lspci | awk -F': ' '/VGA|3D|Display/ { if ($2 ~ /RTX 3050/) print \"RTX 3050\"; else if ($2 ~ /UHD Graphics/) print \"Intel UHD\"; else { gsub(/NVIDIA Corporation |Intel Corporation |Advanced Micro Devices, Inc. \\\\[AMD\\\\/ATI\\\\] /, \"\", $2); gsub(/ \\\\(rev.*\\\\)/, \"\", $2); gsub(/ \\\\[.*\\\\]/, \"\", $2); print $2 } }' | paste -sd+ - | sed 's/+/ + /g'"
+        },
+        {
+            "type": "command",
+            "key": "disk",
+            "text": "df -h / | awk 'NR == 2 {print $3 \" / \" $2}'"
+        },
+        {
+            "type": "command",
+            "key": "bat",
+            "text": "bat=$(find /sys/class/power_supply -maxdepth 1 -name 'BAT*' | head -n1); if [ -n \"$bat\" ]; then printf '%s%% %s' \"$(cat \"$bat/capacity\")\" \"$(cat \"$bat/status\")\"; else printf 'AC'; fi"
+        },
+        {
+            "type": "command",
+            "key": "wifi",
+            "text": "iwgetid -r 2>/dev/null || nmcli -t -f NAME,TYPE connection show --active 2>/dev/null | awk -F: '$2 == \"802-11-wireless\" {print $1; exit}'"
+        },
+        {
+            "type": "break"
+        },
+        {
+            "type": "colors",
+            "symbol": "circle"
+        }
+    ]
+}

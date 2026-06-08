@@ -1,0 +1,82 @@
+* {
+    bg: #000000;
+    fg: #b8b8b8;
+    fghi: #e8e8e8;
+    sep: #101010;
+    border: #191919;
+    panel: #050505;
+    panelhi: #1c1315;
+    accent: #b27986;
+    red: #a85858;
+    amber: #a88c5c;
+    font: "JetBrainsMono Nerd Font 12";
+    background-color: transparent;
+    text-color: @fg;
+    border-color: @border;
+    margin: 0;
+    padding: 0;
+    spacing: 0;
+}
+
+window {
+    width: 38%;
+    background-color: @bg;
+    border: 1px;
+    border-radius: 0;
+}
+
+mainbox {
+    padding: 12px;
+    spacing: 10px;
+    children: [inputbar, listview];
+}
+
+inputbar {
+    padding: 9px 11px;
+    border: 1px;
+    border-color: @sep;
+    background-color: @panel;
+    children: [prompt, entry];
+}
+
+prompt {
+    text-color: @accent;
+    padding: 0 10px 0 0;
+}
+
+entry {
+    text-color: @fghi;
+    placeholder-color: @fg;
+}
+
+listview {
+    lines: 11;
+    fixed-height: true;
+    scrollbar: false;
+    border: 1px 0 0 0;
+    border-color: @sep;
+}
+
+element {
+    padding: 8px 10px;
+    spacing: 10px;
+    border: 0 0 1px 3px;
+    border-color: @sep;
+}
+
+element selected.normal {
+    background-color: @panelhi;
+    border-color: @accent;
+}
+
+element-icon {
+    size: 1.15em;
+}
+
+element-text {
+    text-color: inherit;
+}
+
+element selected.normal element-text {
+    text-color: @fghi;
+}

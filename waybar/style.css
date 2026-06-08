@@ -1,0 +1,138 @@
+@import url("colors.css");
+
+* {
+    font-family: 'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+*:hover {
+    background: transparent;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+window#waybar {
+    background-color: @bg;
+    color: @fghi;
+    border-bottom: 1px solid @border-bot;
+}
+
+#workspaces button {
+    color: @fg;
+    background: transparent;
+    padding: 0 10px;
+    min-width: 0;
+    box-shadow: none;
+    border: none;
+    padding: 5px 13px;
+    border-right: 1px solid @sep;
+    transition: none;
+}
+
+#workspaces button:first-child {
+    border-left: 1px solid @sep;
+}
+
+#workspaces button.focused,
+#workspaces button.active {
+    color: @fghi;
+}
+
+#workspaces button.urgent {
+    color: @red;
+    background: transparent;
+}
+
+#mode,
+#submap {
+    padding: 0 10px;
+    border-left: 1px solid @sep;
+    border-right: 1px solid @sep;
+    color: @red;
+    font-style: normal;
+}
+
+#network,
+#custom-settings,
+#custom-screenshot,
+#custom-recording,
+#custom-uptime,
+#custom-theme,
+#custom-vitals,
+#custom-bluetooth,
+#custom-power-profile,
+#wireplumber,
+#backlight,
+#battery,
+#clock.date,
+#clock.time,
+#custom-user {
+    padding: 5px 13px;
+    border-left: 1px solid @sep;
+    color: @fghi;
+}
+
+#network.wifi,
+#network.ethernet,
+#network.linked,
+#custom-bluetooth.on,
+#custom-power-profile.performance {
+    color: @green;
+}
+
+#custom-recording.recording {
+    color: @red;
+}
+
+#network.disconnected,
+#custom-bluetooth.off,
+#custom-power-profile.power-saver {
+    color: @red;
+}
+
+#wireplumber.muted {
+    opacity: 0.38;
+}
+
+#battery.charging,
+#battery.plugged {
+    color: @green;
+}
+
+#battery.warning:not(.charging) {
+    color: @amber;
+}
+
+#battery.critical:not(.charging) {
+    color: @red;
+}
+
+#custom-theme,
+#custom-screenshot,
+#custom-settings,
+#custom-user {
+    color: @green;
+}
+
+#custom-vitals.warning {
+    color: @amber;
+}
+
+#custom-vitals.critical {
+    color: @red;
+}
+
+#custom-settings {
+    border-left: 1px solid @sep;
+    border-right: 1px solid @sep;
+}
+
+#custom-user {
+    border-right: 1px solid @sep;
+}

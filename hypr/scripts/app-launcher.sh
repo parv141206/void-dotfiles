@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+exec rofi -show drun -show-icons -drun-display-format "{name}" -theme "$HOME/.config/rofi/minimal.rasi"
