@@ -12,33 +12,33 @@ This is an Arch + Hyprland setup built around a clean Sway-ish workflow, Kitty +
 
 ## What You Get
 
-| Area | Stuff |
-| --- | --- |
-| Window manager | Hyprland, laptop gestures, hover focus, resize/move bindings |
-| Bar | Waybar with workspaces, vitals, Wi-Fi, Bluetooth, sound, brightness, battery, clock, screenshots, recording |
-| Menus | Rofi launcher, clipboard, wallpaper picker, theme picker, power, audio, network, Bluetooth |
-| Terminal | Kitty opens Fish, JetBrains Mono Nerd Font, clean Fastfetch |
-| Themes | Multiple palettes, AMOLED mode, wallpaper color extraction |
-| Dashboard | Display, layout, blur, opacity, animations, Waybar modules, themes, restore defaults |
-| Capture | `grim` + `slurp` screenshots, `satty` or `swappy` editing |
-| Recording | Native monitor recording, 60 FPS, x264 CRF 8, Opus audio, MKV |
+| Area           | Stuff                                                                                                       |
+| -------------- | ----------------------------------------------------------------------------------------------------------- |
+| Window manager | Hyprland, laptop gestures, hover focus, resize/move bindings                                                |
+| Bar            | Waybar with workspaces, vitals, Wi-Fi, Bluetooth, sound, brightness, battery, clock, screenshots, recording |
+| Menus          | Rofi launcher, clipboard, wallpaper picker, theme picker, power, audio, network, Bluetooth                  |
+| Terminal       | Kitty opens Fish, JetBrains Mono Nerd Font, clean Fastfetch                                                 |
+| Themes         | Palette-preview picker, AMOLED mode, wallpaper color extraction, dynamic GTK/Qt app colors                  |
+| Dashboard      | Display, layout, blur, opacity, animations, Waybar modules, themes, restore defaults                        |
+| Capture        | `grim` + `slurp` screenshots, `satty` or `swappy` editing                                                   |
+| Recording      | Native monitor recording, 60 FPS, x264 CRF 8, Opus audio, MKV                                               |
 
 ## Quick Controls
 
-| Action | Shortcut |
-| --- | --- |
-| Terminal | `Super + Enter` |
-| App launcher | `Super + Space` |
-| Files | `Super + E` |
-| Clipboard | `Super + V` |
-| Wallpaper picker | `Super + Shift + W` |
-| Kill window | `Super + C` |
-| Floating | `Super + W` |
-| Fullscreen | `Super + F` |
-| Workspaces | `Super + 1..0` |
-| Move window to workspace | `Super + Shift + 1..0` |
-| Screenshot menu | `Fn + PrintScreen` / `PrintScreen` |
-| Area screenshot edit | `Super + PrintScreen` |
+| Action                   | Shortcut                           |
+| ------------------------ | ---------------------------------- |
+| Terminal                 | `Super + Enter`                    |
+| App launcher             | `Super + Space`                    |
+| Files                    | `Super + E`                        |
+| Clipboard                | `Super + V`                        |
+| Wallpaper picker         | `Super + Shift + W`                |
+| Kill window              | `Super + C`                        |
+| Floating                 | `Super + W`                        |
+| Fullscreen               | `Super + F`                        |
+| Workspaces               | `Super + 1..0`                     |
+| Move window to workspace | `Super + Shift + 1..0`             |
+| Screenshot menu          | `Fn + PrintScreen` / `PrintScreen` |
+| Area screenshot edit     | `Super + PrintScreen`              |
 
 Waybar quick buttons:
 
@@ -75,7 +75,8 @@ hyprland hyprpaper hypridle waybar rofi-wayland kitty fish fastfetch nautilus
 jq xdg-utils brightnessctl playerctl wireplumber pipewire pipewire-pulse
 networkmanager bluez bluez-utils power-profiles-daemon wl-clipboard cliphist
 grim slurp satty swappy wf-recorder python-gobject gtk4
-ttf-jetbrains-mono-nerd noto-fonts xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
+qt5ct qt6ct kvantum ttf-jetbrains-mono-nerd noto-fonts
+xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
 ```
 
 ## Recording
@@ -107,6 +108,10 @@ Screenshots land in:
 ```
 
 The screenshot menu supports area, active-window, and full-screen capture with save/copy/edit actions.
+
+## Dynamic App Colors
+
+Changing a theme rewrites Waybar, Rofi, Kitty, GTK 3/4, and Qt colors, then nudges GTK settings so most open apps refresh without logging out. Some apps are stubborn and may need reopening.
 
 ## What's Tracked
 

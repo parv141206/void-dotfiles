@@ -108,8 +108,12 @@ arch_packages=(
     power-profiles-daemon
     python-gobject
     gtk4
+    qt5ct
+    qt6ct
+    kvantum
     ttf-jetbrains-mono-nerd
     noto-fonts
+    xdg-desktop-portal-gtk
 )
 
 needed_commands=(

@@ -2,7 +2,7 @@
 
 * {
     font-family: 'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     border: none;
     border-radius: 0;
@@ -19,18 +19,18 @@
 
 window#waybar {
     background-color: @bg;
-    color: @fghi;
+    color: @text-soft;
     border-bottom: 1px solid @border-bot;
 }
 
 #workspaces button {
-    color: @fg;
+    color: @accent-dim;
     background: transparent;
     padding: 0 10px;
     min-width: 0;
     box-shadow: none;
     border: none;
-    padding: 4px 10px;
+    padding: 5px 13px;
     border-right: 1px solid @sep;
     transition: none;
 }
@@ -41,7 +41,8 @@ window#waybar {
 
 #workspaces button.focused,
 #workspaces button.active {
-    color: @fghi;
+    color: @accent-soft;
+    background: @panel-hi;
 }
 
 #workspaces button.urgent {
@@ -54,7 +55,7 @@ window#waybar {
     padding: 0 10px;
     border-left: 1px solid @sep;
     border-right: 1px solid @sep;
-    color: @red;
+    color: @accent;
     font-style: normal;
 }
 
@@ -73,9 +74,28 @@ window#waybar {
 #clock.date,
 #clock.time,
 #custom-user {
-    padding: 4px 10px;
+    padding: 5px 13px;
     border-left: 1px solid @sep;
-    color: @fghi;
+    color: @text-soft;
+}
+
+#network:hover,
+#custom-settings:hover,
+#custom-screenshot:hover,
+#custom-recording:hover,
+#custom-uptime:hover,
+#custom-theme:hover,
+#custom-vitals:hover,
+#custom-bluetooth:hover,
+#custom-power-profile:hover,
+#wireplumber:hover,
+#backlight:hover,
+#battery:hover,
+#clock.date:hover,
+#clock.time:hover,
+#custom-user:hover {
+    color: @accent-soft;
+    background: @panel;
 }
 
 #network.wifi,
@@ -83,7 +103,7 @@ window#waybar {
 #network.linked,
 #custom-bluetooth.on,
 #custom-power-profile.performance {
-    color: @green;
+    color: @accent-soft;
 }
 
 #custom-recording.recording {
@@ -102,7 +122,7 @@ window#waybar {
 
 #battery.charging,
 #battery.plugged {
-    color: @green;
+    color: @accent-soft;
 }
 
 #battery.warning:not(.charging) {
@@ -117,7 +137,25 @@ window#waybar {
 #custom-screenshot,
 #custom-settings,
 #custom-user {
-    color: @green;
+    color: @accent;
+}
+
+#clock.date,
+#clock.time {
+    color: @accent-soft;
+}
+
+#wireplumber,
+#backlight,
+#custom-vitals,
+#custom-uptime {
+    color: @text-soft;
+}
+
+#custom-bluetooth,
+#custom-power-profile,
+#network {
+    color: @accent-dim;
 }
 
 #custom-vitals.warning {

@@ -25,6 +25,14 @@ ROFI_WALLPAPER = CONFIG / "rofi/wallpaper.rasi"
 ROFI_WALLPAPER_LIST = CONFIG / "rofi/wallpaper-list.rasi"
 KITTY_THEME = CONFIG / "kitty/current-theme.conf"
 FASTFETCH_CONF = CONFIG / "fastfetch/config.jsonc"
+GTK3_CSS = CONFIG / "gtk-3.0/gtk.css"
+GTK3_SETTINGS = CONFIG / "gtk-3.0/settings.ini"
+GTK4_CSS = CONFIG / "gtk-4.0/gtk.css"
+GTK4_SETTINGS = CONFIG / "gtk-4.0/settings.ini"
+QT5_COLORS = CONFIG / "qt5ct/colors/matugen.conf"
+QT5_QSS = CONFIG / "qt5ct/qss/matugen-style.qss"
+QT6_COLORS = CONFIG / "qt6ct/colors/matugen.conf"
+QT6_QSS = CONFIG / "qt6ct/qss/matugen-style.qss"
 
 
 def run(*args):
@@ -763,6 +771,14 @@ class Dashboard(Gtk.Application):
             (ROFI_WALLPAPER_LIST, "rofi-wallpaper-list.rasi"),
             (KITTY_THEME, "kitty-current-theme.conf"),
             (FASTFETCH_CONF, "fastfetch-config.jsonc"),
+            (GTK3_CSS, "gtk3.css"),
+            (GTK3_SETTINGS, "gtk3-settings.ini"),
+            (GTK4_CSS, "gtk4.css"),
+            (GTK4_SETTINGS, "gtk4-settings.ini"),
+            (QT5_COLORS, "qt5ct-matugen.conf"),
+            (QT5_QSS, "qt5ct-matugen.qss"),
+            (QT6_COLORS, "qt6ct-matugen.conf"),
+            (QT6_QSS, "qt6ct-matugen.qss"),
         ]:
             if source.exists():
                 shutil.copy2(source, DEFAULTS / name)
@@ -779,6 +795,14 @@ class Dashboard(Gtk.Application):
             ("rofi-wallpaper-list.rasi", ROFI_WALLPAPER_LIST),
             ("kitty-current-theme.conf", KITTY_THEME),
             ("fastfetch-config.jsonc", FASTFETCH_CONF),
+            ("gtk3.css", GTK3_CSS),
+            ("gtk3-settings.ini", GTK3_SETTINGS),
+            ("gtk4.css", GTK4_CSS),
+            ("gtk4-settings.ini", GTK4_SETTINGS),
+            ("qt5ct-matugen.conf", QT5_COLORS),
+            ("qt5ct-matugen.qss", QT5_QSS),
+            ("qt6ct-matugen.conf", QT6_COLORS),
+            ("qt6ct-matugen.qss", QT6_QSS),
         ]
         for name, target in mapping:
             source = DEFAULTS / name

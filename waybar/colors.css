@@ -4,6 +4,12 @@
 @define-color sep         #101010;
 @define-color border-bot  #191919;
 @define-color ws-active   #1c1315;
+@define-color panel       #050505;
+@define-color panel-hi    #1c1315;
+@define-color accent      #b27986;
+@define-color accent-soft #c5a0a9;
+@define-color accent-dim  #6e4b53;
+@define-color text-soft   #c8c8c8;
 @define-color green       #b27986;
 @define-color red         #a85858;
 @define-color amber       #a88c5c;
