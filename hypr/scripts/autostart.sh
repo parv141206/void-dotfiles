@@ -20,9 +20,20 @@ start_script_once() {
     fi
 }
 
-systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE DBUS_SESSION_BUS_ADDRESS >/dev/null 2>&1 || true
-dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=Hyprland >/dev/null 2>&1 || true
-export GDK_BACKEND=wayland
+export XDG_CURRENT_DESKTOP=Hyprland
+export XDG_SESSION_DESKTOP=Hyprland
+export XDG_SESSION_TYPE=wayland
+export GDK_BACKEND=wayland,x11
+export ELECTRON_OZONE_PLATFORM_HINT=auto
+
+systemctl --user import-environment \
+    WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE \
+    DBUS_SESSION_BUS_ADDRESS GDK_BACKEND QT_QPA_PLATFORM QT_QPA_PLATFORMTHEME \
+    MOZ_ENABLE_WAYLAND ELECTRON_OZONE_PLATFORM_HINT >/dev/null 2>&1 || true
+dbus-update-activation-environment --systemd \
+    WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE \
+    GDK_BACKEND QT_QPA_PLATFORM QT_QPA_PLATFORMTHEME MOZ_ENABLE_WAYLAND \
+    ELECTRON_OZONE_PLATFORM_HINT >/dev/null 2>&1 || true
 
 start_once pipewire pipewire
 start_once waybar waybar

@@ -1,7 +1,7 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 30,
+    "height": 26,
     "margin": 0,
     "exclusive": true,
     "modules-left": [

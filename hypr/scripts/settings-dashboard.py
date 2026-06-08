@@ -106,7 +106,7 @@ def patch_block_line(block, key, value):
 
 
 def restart_waybar():
-    launch(str(CONFIG / "hypr/scripts/restart-waybar.sh"))
+    run(str(CONFIG / "hypr/scripts/restart-waybar.sh"))
 
 
 def load_waybar():
@@ -120,6 +120,58 @@ def save_waybar(data):
 
 def verify_hypr_config():
     return run("Hyprland", "--verify-config", "--config", str(HYPR_CONF)).returncode == 0
+
+
+def hypr_monitors():
+    result = run("hyprctl", "monitors", "-j")
+    if result.returncode != 0:
+        return []
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return []
+
+
+def focused_monitor():
+    monitors = hypr_monitors()
+    for monitor in monitors:
+        if monitor.get("focused"):
+            return monitor
+    return monitors[0] if monitors else {}
+
+
+def mode_for_monitor(monitor):
+    width = int(monitor.get("width", 1920) or 1920)
+    height = int(monitor.get("height", 1080) or 1080)
+    refresh = float(monitor.get("refreshRate", 60) or 60)
+    return f"{width}x{height}@{refresh:.2f}"
+
+
+def position_for_monitor(monitor):
+    return f"{int(monitor.get('x', 0) or 0)}x{int(monitor.get('y', 0) or 0)}"
+
+
+def patch_monitor_rule(name, mode, position, scale):
+    text = read_text(HYPR_CONF)
+    value = f"{name}, {mode}, {position}, {scale:g}"
+    patterns = [rf"^\s*monitor\s*=\s*{re.escape(name)}\s*,[^\n]+", r"^\s*monitor\s*=\s*,[^\n]+"]
+    for pattern in patterns:
+        new_text, count = re.subn(pattern, f"monitor = {value}", text, count=1, flags=re.M)
+        if count:
+            write_text(HYPR_CONF, new_text)
+            return
+    write_text(HYPR_CONF, text.rstrip() + f"\nmonitor = {value}\n")
+
+
+def patch_monitor_extra_rule(name, key, value):
+    text = read_text(HYPR_CONF)
+    line = f"monitor = {name}, {key}, {value}"
+    pattern = rf"^\s*monitor\s*=\s*{re.escape(name)}\s*,\s*{re.escape(key)}\s*,[^\n]+"
+    new_text, count = re.subn(pattern, line, text, count=1, flags=re.M)
+    if count:
+        write_text(HYPR_CONF, new_text)
+    else:
+        write_text(HYPR_CONF, text.rstrip() + f"\n{line}\n")
 
 
 class Dashboard(Gtk.Application):
@@ -165,6 +217,7 @@ class Dashboard(Gtk.Application):
             ("effects", "Effects", self.effects_page()),
             ("layout", "Layout", self.layout_page()),
             ("input", "Input", self.input_page()),
+            ("display", "Display", self.display_page()),
             ("waybar", "Waybar", self.waybar_page()),
             ("appearance", "Appearance", self.appearance_page()),
             ("tools", "Tools", self.tools_page()),
@@ -392,6 +445,45 @@ class Dashboard(Gtk.Application):
         self.switch_row(touchpad, "Middle button emulation", option_int("input:touchpad:middle_button_emulation", 1) == 1, lambda enabled: self.set_touchpad_bool("middle_button_emulation", enabled))
         return scrolled
 
+    def display_page(self):
+        scrolled, page = self.page_shell("Display", "Monitor resolution, scale, position, transform, and refresh behavior.")
+        monitor = focused_monitor()
+        name = monitor.get("name", "")
+        scale = float(monitor.get("scale", 1.0) or 1.0)
+        x = int(monitor.get("x", 0) or 0)
+        y = int(monitor.get("y", 0) or 0)
+
+        info = self.section(page, "Focused monitor")
+        label = Gtk.Label(label=self.display_summary(monitor))
+        label.set_xalign(0)
+        label.set_selectable(True)
+        info.append(label)
+
+        if not name:
+            return scrolled
+
+        mode = self.section(page, "Mode")
+        self.button_row(mode, [
+            ("Native", lambda n=name: self.set_monitor_native(n)),
+            ("Preferred auto", lambda n=name: self.set_monitor_preferred(n)),
+            ("Reload monitors", lambda: run("hyprctl", "reload")),
+        ])
+
+        geometry = self.section(page, "Geometry")
+        self.scale_row(geometry, "Scale", scale, 0.75, 2.00, 0.05, 2, lambda value, n=name: self.set_monitor_scale(n, value))
+        self.spin_row(geometry, "Position X", x, -7680, 7680, 10, lambda value, n=name: self.set_monitor_position(n, x=value))
+        self.spin_row(geometry, "Position Y", y, -4320, 4320, 10, lambda value, n=name: self.set_monitor_position(n, y=value))
+
+        advanced = self.section(page, "Advanced")
+        self.spin_row(advanced, "Transform", int(monitor.get("transform", 0) or 0), 0, 7, 1, lambda value, n=name: self.set_monitor_extra(n, "transform", value))
+        self.switch_row(advanced, "Variable refresh rate", bool(monitor.get("vrr", False)), lambda enabled, n=name: self.set_monitor_extra(n, "vrr", 1 if enabled else 0))
+        self.button_row(advanced, [
+            ("Reset transform", lambda n=name: self.set_monitor_extra(n, "transform", 0)),
+            ("Set 1x scale", lambda n=name: self.set_monitor_scale(n, 1.0)),
+            ("Set native + 1x", lambda n=name: (self.set_monitor_native(n), self.set_monitor_scale(n, 1.0))),
+        ])
+        return scrolled
+
     def waybar_page(self):
         scrolled, page = self.page_shell("Waybar", "Size, layout, and visible modules.")
         size = self.section(page, "Size")
@@ -479,6 +571,56 @@ class Dashboard(Gtk.Application):
             ("Power menu", lambda: launch(str(CONFIG / "hypr/scripts/power-menu.sh"))),
         ])
         return scrolled
+
+    def display_summary(self, monitor):
+        if not monitor:
+            return "No active monitor found."
+        return "\n".join([
+            f"name        {monitor.get('name', 'unknown')}",
+            f"resolution  {monitor.get('width', '?')}x{monitor.get('height', '?')} @ {float(monitor.get('refreshRate', 0) or 0):.2f} Hz",
+            f"position    {monitor.get('x', 0)}x{monitor.get('y', 0)}",
+            f"scale       {float(monitor.get('scale', 1) or 1):.2f}",
+            f"transform   {monitor.get('transform', 0)}",
+            f"focused     {'yes' if monitor.get('focused') else 'no'}",
+        ])
+
+    def monitor_by_name(self, name):
+        for monitor in hypr_monitors():
+            if monitor.get("name") == name:
+                return monitor
+        return focused_monitor()
+
+    def apply_monitor_rule(self, name, mode=None, position=None, scale=None):
+        monitor = self.monitor_by_name(name)
+        mode = mode or mode_for_monitor(monitor)
+        position = position or position_for_monitor(monitor)
+        scale = float(scale if scale is not None else monitor.get("scale", 1.0) or 1.0)
+        value = f"{name}, {mode}, {position}, {scale:g}"
+        hypr_keyword("monitor", value)
+        patch_monitor_rule(name, mode, position, scale)
+        self.refresh_status()
+
+    def set_monitor_native(self, name):
+        monitor = self.monitor_by_name(name)
+        self.apply_monitor_rule(name, mode_for_monitor(monitor), position_for_monitor(monitor), float(monitor.get("scale", 1.0) or 1.0))
+
+    def set_monitor_preferred(self, name):
+        self.apply_monitor_rule(name, "preferred", "auto", 1.0)
+
+    def set_monitor_scale(self, name, scale):
+        monitor = self.monitor_by_name(name)
+        self.apply_monitor_rule(name, mode_for_monitor(monitor), position_for_monitor(monitor), float(scale))
+
+    def set_monitor_position(self, name, x=None, y=None):
+        monitor = self.monitor_by_name(name)
+        xpos = int(x if x is not None else monitor.get("x", 0) or 0)
+        ypos = int(y if y is not None else monitor.get("y", 0) or 0)
+        self.apply_monitor_rule(name, mode_for_monitor(monitor), f"{xpos}x{ypos}", float(monitor.get("scale", 1.0) or 1.0))
+
+    def set_monitor_extra(self, name, key, value):
+        hypr_keyword("monitor", f"{name}, {key}, {value}")
+        patch_monitor_extra_rule(name, key, value)
+        self.refresh_status()
 
     def set_active_opacity(self, value):
         value = f"{value:.2f}"

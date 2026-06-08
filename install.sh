@@ -54,6 +54,7 @@ dotfile_items=(
     nvim
     mako
     swaylock
+    xdg-desktop-portal
     fontconfig
     gtk-3.0
     gtk-4.0

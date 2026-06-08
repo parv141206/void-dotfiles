@@ -35,7 +35,7 @@ status() {
         tooltip="Recording\n$(basename "$file")\nLeft click: stop\nRight click: area recording"
         printf '{"text":"󰑋 rec","class":"recording","tooltip":"%s"}\n' "$(json_escape "$tooltip")"
     else
-        tooltip="Screen recording\nLeft click: full screen\nRight click: select area\nMiddle click: recordings folder"
+        tooltip="Screen recording\nNative monitor, 60 FPS, CRF 8\nLeft click: full screen\nRight click: select area\nMiddle click: recordings folder"
         printf '{"text":"󰕧 rec","class":"idle","tooltip":"%s"}\n' "$(json_escape "$tooltip")"
     fi
 }
@@ -72,10 +72,15 @@ record_args() {
         -r "${RECORD_FPS:-60}" \
         -c "${RECORD_CODEC:-libx264}" \
         -p "preset=${RECORD_PRESET:-slow}" \
-        -p "crf=${RECORD_CRF:-14}" \
+        -p "crf=${RECORD_CRF:-8}" \
         -C "${RECORD_AUDIO_CODEC:-libopus}" \
         -a \
         "$@"
+}
+
+focused_monitor() {
+    hyprctl monitors -j 2>/dev/null |
+        jq -r 'first(.[] | select(.focused == true) | .name) // first(.[].name) // empty' 2>/dev/null
 }
 
 start_recording() {
@@ -84,6 +89,7 @@ start_recording() {
     local file="$dir/recording_$(date +%Y-%m-%d_%H-%M-%S).mkv"
     local log="${XDG_RUNTIME_DIR:-/tmp}/hypr-recording.log"
     local args=()
+    local monitor=""
 
     if running_pid >/dev/null; then
         stop_recording
@@ -102,7 +108,12 @@ start_recording() {
             args=(-g "$geom")
             ;;
         full)
-            args=()
+            monitor=$(focused_monitor)
+            if [[ -n "${monitor:-}" ]]; then
+                args=(-o "$monitor")
+            else
+                args=()
+            fi
             ;;
         *)
             echo "Usage: $0 [status|toggle|full|area|stop|menu|open]" >&2

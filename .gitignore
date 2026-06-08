@@ -33,6 +33,8 @@
 !mako/**
 !swaylock/
 !swaylock/**
+!xdg-desktop-portal/
+!xdg-desktop-portal/**
 
 # Editor and terminal tooling.
 !nvim/
